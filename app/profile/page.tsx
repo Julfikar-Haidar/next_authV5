@@ -1,4 +1,5 @@
 import { auth } from "@/auth";
+import EditButton from "@/components/EditButton";
 
 const API_URL = process.env.NEXT_PUBLIC_GATEWAY_API_URL;
 if (!API_URL) {
@@ -29,6 +30,7 @@ const getProfile = async (accessToken: string) => {
 
 export default async function ProfilePage() {
   const session = await auth();
+
   const accessToken = session?.user?.data?.accessToken;
 
   if (!accessToken) {
@@ -40,6 +42,12 @@ export default async function ProfilePage() {
   const profile = await getProfile(accessToken);
 
   return (
-    <div className="my-5">Profile: {JSON.stringify(profile, null, 2)}</div>
+    <div className="my-5 p-4 border rounded-lg shadow-md">
+      <h2 className="text-xl font-semibold">Profile</h2>
+      <pre className="bg-gray-100 p-3 rounded-md mt-2">
+        {JSON.stringify(profile, null, 2)}
+      </pre>
+      <EditButton profile={profile} />
+    </div>
   );
 }
